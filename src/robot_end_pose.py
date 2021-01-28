@@ -57,7 +57,9 @@ class getEndPose:
         
         self.df = pd.DataFrame(index = ['linear_x','linear_y','linear_z',
                           'theta_x(Roll)','theta_y(Pitch)','theta_z(Yaw)'])
-                
+        self.df['units'] = ['meters','meters','meters',
+                           'radians','radians','radians']
+        
         rospy.init_node(node_name)
         self.sub1 = rospy.Subscriber("odom", Odometry, self.callback1)
         self.sub2 = rospy.Subscriber("odom_start", Float32MultiArray, self.callback2)
@@ -67,11 +69,10 @@ class getEndPose:
             continue
         
         self.df['delta'] = self.df['end'] - self.df['start']
-        df = self.df[['start', 'end', 'delta']]
-        
-        print("============= Summary =============")
+        df = self.df[['start', 'end', 'delta', 'units']]
+
+        print("================= Summary =================")
         print(df)
-            
 
 if __name__ == '__main__':
     subscriber_instance = getEndPose()
